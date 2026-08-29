@@ -1,6 +1,14 @@
 <?php
 
-// config for Abolaradev/LivewireRateLimiter
 return [
 
+    /**
+     * Maximum number of allowed attempts within the decay period.
+     */
+    'maxAttempts' => 5,
+
+    /**
+     * Number of seconds before the attempt counter is reset.
+     */
+    'decaySeconds' => 60,
 ];

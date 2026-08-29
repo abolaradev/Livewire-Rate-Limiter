@@ -72,7 +72,8 @@
                 "Abolaradev\\LivewireRateLimiter\\LivewireRateLimiterServiceProvider"
             ],
             "aliases": {
-                "LivewireRateLimiter": "Abolaradev\\LivewireRateLimiter\\Facades\\LivewireRateLimiter"
+                "LivewireRateLimiter": "Abolaradev\\LivewireRateLimiter\\Facades\\LivewireRateLimiter",
+                "RateLimiterAttribute": " Abolaradev\\LivewireRateLimiter\\Attributes\\RateLimiter"
             }
         }
     },
