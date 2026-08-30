@@ -24,10 +24,7 @@ class LivewireRateLimiterServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-
-      
-   
+    {   
         /**
          * Listen for Livewire method calls and check whether the invoked method
          * has the RateLimiter attribute before allowing it to execute.
@@ -54,11 +51,15 @@ class LivewireRateLimiterServiceProvider extends ServiceProvider
 
         
       
-
+        /**
+         * Register a Blade conditional directive to check whether
+         * the current rate limit is active.
+         */
         Blade::if('limitation', function(){
-              return LivewireRateLimiter::isRateLimited();
+              return LivewireRateLimiter::getAvailableIn() !=0 ;
         });
        
+
         /**
          * Merge the package's default configuration with the application's
          * configuration so the package configuration is available even when

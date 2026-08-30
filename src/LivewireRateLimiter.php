@@ -20,13 +20,6 @@ class LivewireRateLimiter
     /** Seconds until the next attempt is available. */
     private int $availableIn;
 
-    /** Indicates whether the rate limit has been exceeded. */
-    public bool $limitation;
-
-    public bool $test=false;
-
-    public ?Closure $callable;
-
     /** Create a new rate limiter instance. */
     public function __construct($maxAttempts = null, $decaySeconds = null)
     {
@@ -42,8 +35,6 @@ class LivewireRateLimiter
 
         $this->availableIn=0;
         
-        $this->limitation=false;
-        
         $this->resolveKey();
 
     }
@@ -58,35 +49,24 @@ class LivewireRateLimiter
     }
 
     /** Execute the action if the rate limit allows it. */
-    public function handle(Closure $onAction, ?Closure $onLimit = null) :void 
+    public function handle(Closure $onAction, ?Closure $onLimit = null)  
     {
         $execute = RateLimiter::attempt($this->key,$this->maxAttempts,$onAction, $this->decaySeconds);
 
-        if($this->test && is_callable($this->callable) && is_null($onLimit)){
-            $onLimit=$this->callable;
-        }
-
         if (! $execute) {
-            $this->limitation = true;
             $this->availableIn = RateLimiter::availableIn($this->key);
 
             is_callable($onLimit)
                         ? $onLimit()
                         : abort(429);
-
         }
     }
+    
 
     /** Get the remaining cooldown time in seconds. */
     public function getAvailableIn(): int
     {
         return $this->availableIn;
-    }
-
-    /** Determine whether the rate limit has been exceeded. */
-    public function isRateLimited(): bool
-    {
-        return $this->limitation;
     }
     
     /**
@@ -107,18 +87,6 @@ class LivewireRateLimiter
                 request()->ip(),
             ])
         );
-    }
-
-
-
-    public function limit($value)
-    {
-        $this->test=$value;
-    }
-
-    public function message(Closure $callable)
-    {
-        $this->callable=$callable;
     }
 }
 
